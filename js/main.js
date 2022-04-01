@@ -69,13 +69,13 @@ function spawnRain() {
 
 function init() {
     // stats
-    let stats = new Stats();
-    document.body.appendChild(stats.domElement);
+    //let stats = new Stats();
+    //document.body.appendChild(stats.domElement);
 
     // renderer
     let w = window.innerWidth;
     let h = window.innerHeight;
-    renderer = new PIXI.Application(w, h, {backgroundColor : 0x8BB174});
+    renderer = new PIXI.Application(w, h, {backgroundColor : 0x2b2b37});
     document.body.appendChild(renderer.view);
 
     //let killerShape = new Box2D.b2PolygonShape;
@@ -90,7 +90,13 @@ function init() {
     // world
     world = new Box2D.b2World(gravity);
 
-    createBox(0, 0, 5, 1, true);
+    createBox(-10, -5, 1, 1, true);
+    createBox(10, -5, 1, 1, true);
+
+    //createBox(0, -25, 21, 1, true);
+    //createBox(0, 25, 21, 1, true);
+    //createBox(-20, 0, 1, 26, true);
+    //createBox(20, 0, 1, 26, true);
 
     createParticleSystem();
 
@@ -100,7 +106,7 @@ function init() {
             s.position.set(pos.get_x()*PTM, -pos.get_y()*PTM)
             s.rotation = -s.body.GetAngle();
         }
-        stats.update();
+        //stats.update();
     });
 
     // update loop
@@ -109,17 +115,31 @@ function init() {
         world.Step(1/60, 8, 3);
     }
     window.setInterval(update, 1000 / 60);
-    window.setInterval(spawnRain, 10);
 
-    renderer.view.addEventListener("click", function(e) {
+    window.setInterval(function () {
+      if (document.hidden) return;
+      let bandwidth = 35; // mbit
+      let x = 10;
+      let y = 10;
+      spawnParticles(bandwidth / 300, x, y);
+    }, 100);
+
+    window.setInterval(function () {
+      if (document.hidden) return;
+      let bandwidth = 300; // mbit
+      let x = -10;
+      let y = 10;
+      spawnParticles(bandwidth / 500, x, y);
+    }, 1200);
+
+    renderer.view.addEventListener("pointerdown", function(e) {
         let x = ((e.clientX - renderer.view.offsetLeft) - w/2) / PTM;
         let y = (-(e.clientY - renderer.view.offsetTop) + h/2) / PTM;
         if (e.shiftKey) {
-            spawnParticles(1, x, y);
-        } else {
             createBox(x, y, 1, 1, e.ctrlKey);
+        } else {
+            spawnParticles(1, x, y);
         }
     });
 };
-
 window.addEventListener("load", init);

@@ -10,18 +10,18 @@ function LiquidfunSprite(particleSystem) {
     let ball_vert = `
     attribute vec2 position;
     attribute vec4 color;
-    varying vec4 vColor;
+    //varying vec4 vColor;
     uniform float size;
 
     void main() {
-        vColor = vec4(color.x/ 255.0, color.y / 255.0, color.z / 255.0, 1);
+        //vColor = vec4(color.x/ 255.0, color.y / 255.0, color.z / 255.0, 1);
         gl_Position = vec4(position, 0.0, 1.0);
         gl_PointSize = size;
     }`;
 
     let ball_frag = `
     precision mediump float;
-    varying vec4 vColor;
+    //varying vec4 vColor;
 
     void main() {
         if (distance(vec2(0.0, 0.0), gl_PointCoord.xy - 0.5) < 0.5) {
@@ -253,7 +253,9 @@ LiquidfunRenderer.prototype.render = function (sprite) {
         sprite.threshold_shader.uniforms.base = 0;
         sprite.threshold_shader.uniforms.scale = this.texScale();
         sprite.threshold_shader.uniforms.threshold = this.threshold;
-        sprite.threshold_shader.uniforms.color = new Float32Array([1.0, 1.0, 1.0, 0.5]);
+        //sprite.threshold_shader.uniforms.color = new Float32Array([1.0, 1.0, 1.0, 0.5]);
+        //sprite.threshold_shader.uniforms.color = new Float32Array([1.0, 0, 110/255, 1]);
+        sprite.threshold_shader.uniforms.color = new Float32Array([254/255, 140/255, 82/255, 1]);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
