@@ -5,7 +5,7 @@ let topic = "amro/playerone/stream";
 
 client.onMessageArrived = onMessageArrived;
 
-client.connect({ onSuccess, reconnect: true });
+client.connect({ onSuccess, reconnect: true, useSSL: true });
 
 function log(obj) {
   let el = document.createElement('div');
