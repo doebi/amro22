@@ -41,7 +41,7 @@ window.addEventListener('pointerdown', function({ x, y }) {
   send(payload);
 });
 
-window.addEventListener('deviceorientation', function({ alpha, beta, gamma }) {
-  let payload = { cmd: 'playerOne', alpha, beta, gamma };
+window.addEventListener('deviceorientation', function(event) {
+  let payload = { cmd: 'playerOne', angle: event.gamma };
   send(payload);
 });

@@ -1,6 +1,27 @@
+let clientid = window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
+var client = new Paho.Client('test.mosquitto.org', 8081, 'web-' + client);
+
+client.onMessageArrived = onMessageArrived;
+client.connect({ onSuccess, reconnect: true, useSSL: true });
+
+function onSuccess() {
+  client.subscribe('amro/#');
+}
+
+function onMessageArrived(message) {
+  let obj = JSON.parse(message.payloadString);
+  switch(obj.cmd) {
+    case "playerOne":
+      playerOne.SetTransform(playerThree.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      break
+  }
+}
+
 let PTM = 20;
 let sprites = [];
 let world, renderer, particleSystem;
+
+let playerOne, playerTwo, playerThree;
 
 let gravity = new Box2D.b2Vec2(0, -10);
 
@@ -132,8 +153,10 @@ function init() {
   // world
   world = new Box2D.b2World(gravity);
 
-  createBox(-10, -5, 3, 0.5, true);
-  createBox(10, -5, 3, 0.5, true);
+  playerOne = createBox(-5, -5, 3, 0.5, true);
+  playerTwo = createBox(0, -5, 3, 0.5, true);
+  playerThree = createBox(5, -5, 3, 0.5, true);
+  //createBox(10, -5, 3, 0.5, true);
 
   //createBox(0, -25, 21, 1, true);
   //createBox(0, 25, 21, 1, true);
