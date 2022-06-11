@@ -42,7 +42,7 @@ window.addEventListener('pointerdown', function({ x, y }) {
   send(payload);
 });
 
-window.addEventListener('deviceorientation', function(event) {
+window.addEventListener('deviceorientation', function({ alpha, beta, gamma }) {
   let payload = { alpha, beta, gamma };
   send(payload);
 });
