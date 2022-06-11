@@ -12,7 +12,7 @@ function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
   switch(obj.cmd) {
     case "playerOne":
-      playerOne.SetTransform(playerThree.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      playerOne.SetTransform(playerOne.GetPosition(), obj.angle * -1 * (Math.PI/180));
       break
   }
 }
@@ -153,9 +153,9 @@ function init() {
   // world
   world = new Box2D.b2World(gravity);
 
-  playerOne = createBox(-5, -5, 3, 0.5, true);
-  playerTwo = createBox(0, -5, 3, 0.5, true);
-  playerThree = createBox(5, -5, 3, 0.5, true);
+  playerOne = createBox(0, -5, 3, 0.5, true);
+  //playerTwo = createBox(0, -5, 3, 0.5, true);
+  //playerThree = createBox(5, -5, 3, 0.5, true);
   //createBox(10, -5, 3, 0.5, true);
 
   //createBox(0, -25, 21, 1, true);

@@ -2,6 +2,7 @@ let id = window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
 var client = new Paho.Client('test.mosquitto.org', 8081, 'web-' + id);
 
 let topic = "amro/events";
+let last_angle = null;
 
 client.onMessageArrived = onMessageArrived;
 
@@ -42,6 +43,9 @@ window.addEventListener('pointerdown', function({ x, y }) {
 });
 
 window.addEventListener('deviceorientation', function(event) {
-  let payload = { cmd: 'playerOne', angle: event.gamma };
-  send(payload);
+  if (last_angle != event.gamma) {
+    let payload = { cmd: 'playerOne', angle: event.gamma };
+    send(payload);
+    last_angle = event.gamma;
+  }
 });
