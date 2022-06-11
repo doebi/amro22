@@ -1,5 +1,5 @@
 let id = window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
-var client = new Paho.Client('wss://test.mosquitto.org', 8081, 'web-' + id);
+var client = new Paho.Client('test.mosquitto.org', 8081, 'web-' + id);
 
 let topic = "amro/playerone/stream";
 
