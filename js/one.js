@@ -38,7 +38,7 @@ function send(payload) {
 }
 
 window.addEventListener('pointerdown', function() {
-  if (new Date().getTime() - 1000 > last_click) {
+  if (new Date().getTime() - 100 > last_click) {
     let payload = { cmd: 'playerOne' };
     send(payload);
     last_click = new Date().getTime();
