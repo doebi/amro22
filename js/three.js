@@ -46,3 +46,8 @@ window.addEventListener("load", function() {
     }
   });
 });
+
+document.addEventListener("touchmove", function(e){
+  if (e.target.id == "slider") return;
+  e.preventDefault()
+}, {passive: false});
