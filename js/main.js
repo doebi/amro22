@@ -12,7 +12,12 @@ function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
   switch(obj.cmd) {
     case "playerOne":
-      playerOne.SetTransform(playerOne.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      break
+    case "playerTwo":
+      playerTwo.SetTransform(playerTwo.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      break
+    case "playerThree":
+      //playerThree.SetTransform(playerThree.GetPosition(), obj.angle * -1 * (Math.PI/180));
       break
   }
 }
@@ -24,6 +29,7 @@ let world, renderer, particleSystem;
 let playerOne, playerTwo, playerThree;
 
 let gravity = new Box2D.b2Vec2(0, -10);
+let force = new Box2D.b2Vec2(0, -20);
 
 function getRandom(min, max) {
   return Math.random() * (max - min) + min;
@@ -153,25 +159,26 @@ function init() {
   // world
   world = new Box2D.b2World(gravity);
 
-  playerOne = createBox(0, -5, 3, 0.5, true);
-  //playerTwo = createBox(0, -5, 3, 0.5, true);
-  //playerThree = createBox(5, -5, 3, 0.5, true);
-  //createBox(10, -5, 3, 0.5, true);
-
-  //createBox(0, -25, 21, 1, true);
-  //createBox(0, 25, 21, 1, true);
-  //createBox(-20, 0, 1, 26, true);
-  //createBox(20, 0, 1, 26, true);
+  spawner = createBox(0, 25, 1, 1, true);
+  playerTwo = createBox(0, -5, 3, 0.5, true);
 
   createParticleSystem();
 
+  let tick = 0;
   renderer.ticker.add(function() {
+    tick++;
+
+    let pos = spawner.GetPosition();
+    pos.set_x(Math.sin(tick / 50) * 40);
+    pos.set_y(25);
+
+    spawner.SetTransform(pos, 0);
+
     for (let i=0,s=sprites[i];i<sprites.length;s=sprites[++i]) {
       let pos = s.body.GetPosition();
       s.position.set(pos.get_x()*PTM, -pos.get_y()*PTM)
       s.rotation = -s.body.GetAngle();
     }
-    //stats.update();
   });
 
   // update loop
@@ -194,11 +201,14 @@ function init() {
   */
 };
 
-function spawn() {
-  let bandwidth = 40;
-  let x = 0;
-  let y = 10;
-  spawnParticles(bandwidth / 100, x, y);
+function spawn(bandwidth) {
+  let pos = spawner.GetPosition();
+  let s = spawnParticles(bandwidth / 100, pos.get_x(), pos.get_y() - 2);
+  s.ApplyLinearImpulse(force);
+}
+function trigger_spawn() {
+  spawn(50);
 }
 window.addEventListener("load", init);
-window.addEventListener("pointerdown", spawn);
+window.setInterval(trigger_spawn, 1800);
+//window.addEventListener("pointerdown", spawn);

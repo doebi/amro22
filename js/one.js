@@ -38,14 +38,6 @@ function send(payload) {
 }
 
 window.addEventListener('pointerdown', function({ x, y }) {
-  let payload = { x, y };
+  let payload = { cmd: 'playerOne', x, y };
   send(payload);
-});
-
-window.addEventListener('deviceorientation', function(event) {
-  if (last_angle != event.gamma) {
-    let payload = { cmd: 'playerOne', angle: event.gamma };
-    send(payload);
-    last_angle = event.gamma;
-  }
 });
