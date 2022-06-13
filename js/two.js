@@ -33,7 +33,7 @@ function onMessageArrived(message) {
 
 function send(payload) {
   if (client.isConnected) {
-    client.publish(topic, JSON.stringify(payload));
+    client.publish(topic, JSON.stringify(payload), 2);
   }
 }
 

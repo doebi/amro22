@@ -33,7 +33,7 @@ function onMessageArrived(message) {
 
 function send(payload) {
   if (client.isConnected) {
-    client.publish(topic, JSON.stringify(payload));
+    client.publish(topic, JSON.stringify(payload), 2);
   }
 }
 
@@ -46,6 +46,11 @@ window.addEventListener("load", function() {
     }
   });
 });
+
+document.addEventListener("scroll", function(e){
+  if (e.target.id == "slider") return;
+  e.preventDefault()
+}, {passive: false});
 
 document.addEventListener("touchmove", function(e){
   if (e.target.id == "slider") return;

@@ -33,12 +33,12 @@ function onMessageArrived(message) {
 
 function send(payload) {
   if (client.isConnected) {
-    client.publish(topic, JSON.stringify(payload));
+    client.publish(topic, JSON.stringify(payload), 2);
   }
 }
 
 window.addEventListener('pointerdown', function() {
-  if (new Date.getTime() - 1000 > last_click) {
+  if (new Date().getTime() - 1000 > last_click) {
     let payload = { cmd: 'playerOne' };
     send(payload);
     last_click = new Date().getTime();

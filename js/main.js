@@ -7,9 +7,11 @@ client.connect({ onSuccess, reconnect: true, useSSL: true });
 function onSuccess() {
   client.subscribe('amro/#');
 }
+let pos3;
 
 function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
+  console.log(obj);
   switch(obj.cmd) {
     case "playerOne":
       spawn(50);
@@ -18,7 +20,9 @@ function onMessageArrived(message) {
       playerTwo.SetTransform(playerTwo.GetPosition(), obj.angle * -1 * (Math.PI/180));
       break
     case "playerThree":
-      //playerThree.SetTransform(playerThree.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      pos3 = playerThree.GetPosition();
+      pos3.set_x(Number(obj.value) * 30);
+      playerThree.SetTransform(pos, 0);
       break
   }
 }
@@ -162,6 +166,7 @@ function init() {
 
   spawner = createBox(0, 25, 1, 1, true);
   playerTwo = createBox(0, -5, 3, 0.5, true);
+  playerThree = createBox(0, -12, 3, 0.5, true);
 
   createParticleSystem();
 
