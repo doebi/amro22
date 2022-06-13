@@ -12,6 +12,7 @@ function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
   switch(obj.cmd) {
     case "playerOne":
+      spawn(50);
       break
     case "playerTwo":
       playerTwo.SetTransform(playerTwo.GetPosition(), obj.angle * -1 * (Math.PI/180));
@@ -169,7 +170,7 @@ function init() {
     tick++;
 
     let pos = spawner.GetPosition();
-    pos.set_x(Math.sin(tick / 50) * 40);
+    pos.set_x(Math.sin(tick / 100) * 42);
     pos.set_y(25);
 
     spawner.SetTransform(pos, 0);
@@ -206,9 +207,5 @@ function spawn(bandwidth) {
   let s = spawnParticles(bandwidth / 100, pos.get_x(), pos.get_y() - 2);
   s.ApplyLinearImpulse(force);
 }
-function trigger_spawn() {
-  spawn(50);
-}
 window.addEventListener("load", init);
-window.setInterval(trigger_spawn, 1800);
 //window.addEventListener("pointerdown", spawn);

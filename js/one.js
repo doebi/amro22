@@ -2,7 +2,7 @@ let id = window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
 var client = new Paho.Client('test.mosquitto.org', 8081, 'web-' + id);
 
 let topic = "amro/events";
-let last_angle = null;
+let last_click = null;
 
 client.onMessageArrived = onMessageArrived;
 
@@ -37,7 +37,10 @@ function send(payload) {
   }
 }
 
-window.addEventListener('pointerdown', function({ x, y }) {
-  let payload = { cmd: 'playerOne', x, y };
-  send(payload);
+window.addEventListener('pointerdown', function() {
+  if (new Date.getTime() - 1000 > last_click) {
+    let payload = { cmd: 'playerOne' };
+    send(payload);
+    last_click = new Date().getTime();
+  }
 });
