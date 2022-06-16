@@ -46,5 +46,7 @@ window.addEventListener('pointerdown', function() {
 });
 
 function autoSpawn() {
-  send({ cmd: "autoSpawn" });
+  window.setTimeout(() => {
+    send({ cmd: "autoSpawn" });
+  }, 100);
 }
