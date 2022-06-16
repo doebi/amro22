@@ -37,15 +37,18 @@ function send(payload) {
   }
 }
 
-window.addEventListener('deviceorientation', function(event) {
-  if (last_angle != event.gamma) {
-    let payload = { cmd: 'playerTwo', angle: event.gamma };
-    send(payload);
-    last_angle = event.gamma;
-  }
-});
+function register_motionevent() {
+  window.addEventListener('deviceorientation', function(event) {
+    if (last_angle != event.gamma) {
+      let payload = { cmd: 'playerTwo', angle: event.gamma };
+      send(payload);
+      last_angle = event.gamma;
+    }
+  });
+}
 
 window.addEventListener('pointerdown', function(event) {
   alert("hi")
-  DeviceOrientationEvent.requestPermission()
+  DeviceOrientationEvent.requestPermission().then(register_motionevent);
 }
+register_motionevent();
