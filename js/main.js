@@ -17,7 +17,9 @@ function onMessageArrived(message) {
       spawn(50);
       break
     case "playerTwo":
-      playerTwo.SetTransform(playerTwo.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      for (let b of playerTwo) {
+        b.SetTransform(b.GetPosition(), obj.angle * -1 * (Math.PI/180));
+      }
       break
     case "playerThree":
       pos3 = playerThree.GetPosition();
@@ -141,15 +143,31 @@ function createFunnel(x, y) {
   return body;
 }
 
-function init() {
+function drawPolygon(poly, pos, ctx) {
+  let path = [];
+  for (var i = 0, len = poly.vertices.x.length; i < len; i++) {
+    path.push((poly.vertices.x[i] + pos.x) * 20);
+    path.push((poly.vertices.y[i] + pos.y) * -20);
+  }
+  ctx.lineStyle(0);
+  ctx.beginFill(0xAAAAAA, 1);
+  ctx.drawPolygon(path);
+  ctx.endFill();
+}
+
+async function init() {
   // stats
   //let stats = new Stats();
   //document.body.appendChild(stats.domElement);
 
+  let json = await fetch("/test.json").then((r) => {
+    return r.json();
+  });
+
   // renderer
   let w = window.innerWidth;
   let h = window.innerHeight;
-  renderer = new PIXI.Application(w, h, {backgroundColor : 0x484864});
+  renderer = new PIXI.Application(w, h, {backgroundColor : 0x333333});
   document.body.appendChild(renderer.view);
 
   //let killerShape = new Box2D.b2PolygonShape;
@@ -164,9 +182,28 @@ function init() {
   // world
   world = new Box2D.b2World(gravity);
 
+  loadSceneIntoWorld(json, world);
+
+  const g = new PIXI.Graphics();
+
+  for (let b of json.body) {
+    for (let f of b.fixture) {
+      if (f.hasOwnProperty("polygon")) {
+        drawPolygon(f.polygon, b.position, g);
+      } else {
+        console.log("cannot draw ", f);
+      }
+    }
+  }
+
+  renderer.stage.addChild(g);
+
   spawner = createBox(0, 25, 1, 1, true);
-  playerTwo = createBox(0, -5, 3, 0.5, true);
-  playerThree = createBox(0, -12, 3, 0.5, true);
+
+  playerTwo = [];
+  playerTwo.push(createBox(-27, 0, 5, 0.5, true));
+  playerTwo.push(createBox(-29, 20, 3, 0.5, true));
+  //playerThree = createBox(0, -12, 3, 0.5, true);
 
   createParticleSystem();
 
@@ -212,5 +249,9 @@ function spawn(bandwidth) {
   let s = spawnParticles(bandwidth / 100, pos.get_x(), pos.get_y() - 2);
   s.ApplyLinearImpulse(force);
 }
+function trigger_spawn() {
+  spawn(40);
+}
+window.setInterval(trigger_spawn, 180);
 window.addEventListener("load", init);
 //window.addEventListener("pointerdown", spawn);

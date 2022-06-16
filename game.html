@@ -12,22 +12,5 @@
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
   </head>
-  <body>
-    <div id="shield">
-    </div>
-    <script charset="utf-8">
-let val = 100;
-let shield = document.getElementById("shield");
-shield.addEventListener("wheel", function(e) {
-  if (e.deltaY < 0) {
-    if (val >= 100) return;
-    ++val;
-  } else if (e.deltaY > 0) {
-    if (val <= 0) return;
-    --val;
-  }
-  shield.style = `backdrop-filter: blur(${val}px)`;
-})
-    </script>
-  </body>
+  <body></body>
 </html>

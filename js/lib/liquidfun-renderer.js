@@ -254,8 +254,8 @@ LiquidfunRenderer.prototype.render = function (sprite) {
         sprite.threshold_shader.uniforms.scale = this.texScale();
         sprite.threshold_shader.uniforms.threshold = this.threshold;
         //sprite.threshold_shader.uniforms.color = new Float32Array([1.0, 1.0, 1.0, 0.5]);
-        //sprite.threshold_shader.uniforms.color = new Float32Array([1.0, 0, 110/255, 1]);
-        sprite.threshold_shader.uniforms.color = new Float32Array([154/255, 55/255, 248/255, 1]);
+        sprite.threshold_shader.uniforms.color = new Float32Array([1.0, 0, 110/255, 1]);
+        //sprite.threshold_shader.uniforms.color = new Float32Array([154/255, 55/255, 248/255, 1]);
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }

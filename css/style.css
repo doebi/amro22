@@ -17,3 +17,11 @@ p {
     position: fixed;
     top: 0;
 }
+#shield {
+  position: absolute;
+  top: 100px;
+  width: 100vw;
+  height: 880px;
+  background-color: rgba(51, 51, 51, 0.1);
+  backdrop-filter: blur(100px);
+}

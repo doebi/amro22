@@ -44,3 +44,7 @@ window.addEventListener('deviceorientation', function(event) {
     last_angle = event.gamma;
   }
 });
+
+window.addEventListener('pointerdown', function(event) {
+  DeviceOrientationEvent.requestPermission()
+}
