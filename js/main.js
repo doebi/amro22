@@ -1,6 +1,8 @@
 let clientid = window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
 var client = new Paho.Client('test.mosquitto.org', 8081, 'web-' + client);
 
+var autoSpawn;
+
 client.onMessageArrived = onMessageArrived;
 client.connect({ onSuccess, reconnect: true, useSSL: true });
 
@@ -11,8 +13,13 @@ let pos3;
 
 function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
+  console.log(obj);
   switch(obj.cmd) {
+    case "autoSpawn":
+      autoSpawn = window.setInterval(trigger_spawn, 180);
+      break;
     case "playerOne":
+      window.clearInterval(autoSpawn);
       spawn(50);
       break
     case "playerTwo":
@@ -212,6 +219,7 @@ async function init() {
   balls.push(createBox(0, 0, 1, 1, false));
   balls.push(createBox(0, 0, 1, 1, false));
   balls.push(createBox(0, 0, 1, 1, false));
+  balls.push(createBox(0, 0, 1, 1, false));
 
   playerTwo = [];
   playerTwo.push(createBox(-27, 0, 5, 0.5, true));
@@ -275,6 +283,6 @@ function spawn(bandwidth) {
 function trigger_spawn() {
   spawn(40);
 }
-window.setInterval(trigger_spawn, 180);
+autoSpawn = window.setInterval(trigger_spawn, 180);
 window.addEventListener("load", init);
 //window.addEventListener("pointerdown", spawn);
