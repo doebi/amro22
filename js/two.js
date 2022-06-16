@@ -37,17 +37,10 @@ function send(payload) {
   }
 }
 
-function register_motionevent() {
-  window.addEventListener('deviceorientation', function(event) {
-    if (last_angle != event.gamma) {
-      let payload = { cmd: 'playerTwo', angle: event.gamma };
-      send(payload);
-      last_angle = event.gamma;
-    }
-  });
-}
-
-window.addEventListener('pointerdown', function(event) {
-  DeviceOrientationEvent.requestPermission().then(register_motionevent);
+window.addEventListener('deviceorientation', function(event) {
+  if (last_angle != event.gamma) {
+    let payload = { cmd: 'playerTwo', angle: event.gamma };
+    send(payload);
+    last_angle = event.gamma;
+  }
 });
-register_motionevent();
