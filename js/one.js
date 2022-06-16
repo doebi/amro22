@@ -44,9 +44,3 @@ window.addEventListener('pointerdown', function() {
     last_click = new Date().getTime();
   }
 });
-
-function autoSpawn() {
-  window.setTimeout(() => {
-    send({ cmd: "autoSpawn" });
-  }, 100);
-}

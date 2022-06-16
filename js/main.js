@@ -13,7 +13,6 @@ let pos3;
 
 function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
-  console.log(obj);
   switch(obj.cmd) {
     case "autoSpawn":
       autoSpawn = window.setInterval(trigger_spawn, 180);
