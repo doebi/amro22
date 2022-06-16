@@ -143,16 +143,30 @@ function createFunnel(x, y) {
   return body;
 }
 
-function drawPolygon(poly, pos, ctx) {
-  let path = [];
-  for (var i = 0, len = poly.vertices.x.length; i < len; i++) {
-    path.push((poly.vertices.x[i] + pos.x) * 20);
-    path.push((poly.vertices.y[i] + pos.y) * -20);
+function drawBody(body) {
+  let ctx = new PIXI.Graphics();
+
+  console.log(body);
+
+  for (let f of body.fixture) {
+    if (f.hasOwnProperty("polygon")) {
+      let path = [];
+      for (var i = 0, len = f.polygon.vertices.x.length; i < len; i++) {
+        path.push((f.polygon.vertices.x[i] + body.position.x) * 20);
+        path.push((f.polygon.vertices.y[i] + body.position.y) * -20);
+      }
+      ctx.lineStyle(0);
+      ctx.beginFill(0xAAAAAA, 1);
+      ctx.drawPolygon(path);
+      ctx.endFill();
+    } else {
+      console.log("cannot draw ", f);
+    }
   }
-  ctx.lineStyle(0);
-  ctx.beginFill(0xAAAAAA, 1);
-  ctx.drawPolygon(path);
-  ctx.endFill();
+
+  ctx.rotation = body.angle * (180/Math.PI);
+
+  return ctx;
 }
 
 async function init() {
@@ -184,21 +198,18 @@ async function init() {
 
   loadSceneIntoWorld(json, world);
 
-  const g = new PIXI.Graphics();
 
   for (let b of json.body) {
-    for (let f of b.fixture) {
-      if (f.hasOwnProperty("polygon")) {
-        drawPolygon(f.polygon, b.position, g);
-      } else {
-        console.log("cannot draw ", f);
-      }
-    }
+    let g = drawBody(b, renderer);
+    renderer.stage.addChild(g);
   }
 
-  renderer.stage.addChild(g);
 
   spawner = createBox(0, 25, 1, 1, true);
+  flipper_right = createBox(44.5, 6, 1, 1, true);
+  flipper_right_2 = createBox(24.5, 10, 1, 1, true);
+  wheel_1 = createBox(12, 14, 5, 0.2, true);
+  wheel_2 = createBox(12, 14, 5, 0.2, true);
 
   playerTwo = [];
   playerTwo.push(createBox(-27, 0, 5, 0.5, true));
@@ -208,14 +219,24 @@ async function init() {
   createParticleSystem();
 
   let tick = 0;
+  let pos;
   renderer.ticker.add(function() {
     tick++;
 
-    let pos = spawner.GetPosition();
+    pos = spawner.GetPosition();
     pos.set_x(Math.sin(tick / 100) * 42);
-    pos.set_y(25);
+    spawner.SetTransform(spawner.GetPosition(), 0);
 
-    spawner.SetTransform(pos, 0);
+    pos = flipper_right.GetPosition();
+    pos.set_y(Math.sin(tick / 50 * 20) + 6);
+    flipper_right.SetTransform(flipper_right.GetPosition(), 0);
+
+    pos = flipper_right_2.GetPosition();
+    pos.set_y(Math.sin(tick / 50 * 20) + 10);
+    flipper_right_2.SetTransform(flipper_right_2.GetPosition(), 0);
+
+    wheel_1.SetTransform(wheel_1.GetPosition(), tick / 15);
+    wheel_2.SetTransform(wheel_1.GetPosition(), (tick / 15) + Math.PI/2);
 
     for (let i=0,s=sprites[i];i<sprites.length;s=sprites[++i]) {
       let pos = s.body.GetPosition();
