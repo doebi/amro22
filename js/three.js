@@ -38,10 +38,10 @@ function send(payload) {
 }
 
 window.addEventListener('devicemotion', function(event) {
-  console.log(event);
-  if (last_angle != event.gamma) {
-    let payload = { cmd: 'playerTwo', angle: event.gamma };
-    send(payload);
-    last_angle = event.gamma;
+  if (event.acceleration.x > 0.1) {
+    console.log("x", event.acceleration.x);
+  }
+  if (event.acceleration.y > 0.1) {
+    console.log("y", event.acceleration.y);
   }
 });
