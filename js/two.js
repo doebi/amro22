@@ -50,5 +50,5 @@ function register_motionevent() {
 window.addEventListener('pointerdown', function(event) {
   alert("hi")
   DeviceOrientationEvent.requestPermission().then(register_motionevent);
-}
+});
 register_motionevent();
