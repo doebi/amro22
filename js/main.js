@@ -210,8 +210,15 @@ async function init() {
   spawner = createBox(0, 25, 1, 1, true);
   flipper_right = createBox(44.5, 6, 1, 1, true);
   flipper_right_2 = createBox(24.5, 10, 1, 1, true);
+  flipper_left = createBox(-15, -8, 3, 0.5, true);
+
+  flipper_ru = createBox(23, -8, 3, 0.5, true);
+
   wheel_1 = createBox(12, 14, 5, 0.2, true);
   wheel_2 = createBox(12, 14, 5, 0.2, true);
+
+  wheel_3 = createBox(-9.5, 5, 3, 0.2, true);
+  wheel_4 = createBox(-9.5, 5, 3, 0.2, true);
 
   balls = [];
   balls.push(createBox(0, 0, 1, 1, false));
@@ -223,6 +230,8 @@ async function init() {
   playerTwo = [];
   playerTwo.push(createBox(-27, 0, 5, 0.5, true));
   playerTwo.push(createBox(-29, 20, 3, 0.5, true));
+  playerTwo.push(createBox(30, -1, 2, 0.5, true));
+  playerTwo.push(createBox(12, 1, 4, 0.5, true));
   //playerThree = createBox(0, -12, 3, 0.5, true);
 
   createParticleSystem();
@@ -244,8 +253,19 @@ async function init() {
     pos.set_y(Math.sin(tick / 50 * 20) + 10);
     flipper_right_2.SetTransform(flipper_right_2.GetPosition(), 0);
 
+    pos = flipper_left.GetPosition();
+    pos.set_y(Math.sin(tick / 50 * 20) - 8);
+    flipper_left.SetTransform(flipper_left.GetPosition(), 0);
+
+    pos = flipper_ru.GetPosition();
+    pos.set_y(Math.sin(tick / 50 * 20) - 8);
+    flipper_ru.SetTransform(flipper_ru.GetPosition(), 0);
+
     wheel_1.SetTransform(wheel_1.GetPosition(), tick / 15);
     wheel_2.SetTransform(wheel_1.GetPosition(), (tick / 15) + Math.PI/2);
+
+    wheel_3.SetTransform(wheel_3.GetPosition(), tick / 20);
+    wheel_4.SetTransform(wheel_3.GetPosition(), (tick / 20) + Math.PI/2);
 
     for (let i=0,s=sprites[i];i<sprites.length;s=sprites[++i]) {
       let pos = s.body.GetPosition();
