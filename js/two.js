@@ -46,5 +46,6 @@ window.addEventListener('deviceorientation', function(event) {
 });
 
 window.addEventListener('pointerdown', function(event) {
+  alert("hi")
   DeviceOrientationEvent.requestPermission()
 }
