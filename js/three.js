@@ -40,7 +40,7 @@ function send(payload) {
 window.addEventListener('devicemotion', function(event) {
   let x = event.acceleration.x;
   let y = event.acceleration.y;
-  if (x > 5 || y > 5) {
+  if (x > 15 || y > 15) {
     let payload = { cmd: "playerThree", x, y };
     send(payload);
   }

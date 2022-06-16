@@ -11,7 +11,6 @@ let pos3;
 
 function onMessageArrived(message) {
   let obj = JSON.parse(message.payloadString);
-  console.log(obj);
   switch(obj.cmd) {
     case "playerOne":
       spawn(50);
@@ -22,9 +21,9 @@ function onMessageArrived(message) {
       }
       break
     case "playerThree":
-      pos3 = playerThree.GetPosition();
-      pos3.set_x(Number(obj.value) * 30);
-      playerThree.SetTransform(pos, 0);
+      for (let b of balls) {
+        b.ApplyLinearImpulse(new Box2D.b2Vec2(obj.x * 0.1, obj.y * -0.1), 0);
+      }
       break
   }
 }
@@ -34,6 +33,7 @@ let sprites = [];
 let world, renderer, particleSystem;
 
 let playerOne, playerTwo, playerThree;
+let balls;
 
 let gravity = new Box2D.b2Vec2(0, -10);
 let force = new Box2D.b2Vec2(0, -20);
@@ -146,8 +146,6 @@ function createFunnel(x, y) {
 function drawBody(body) {
   let ctx = new PIXI.Graphics();
 
-  console.log(body);
-
   for (let f of body.fixture) {
     if (f.hasOwnProperty("polygon")) {
       let path = [];
@@ -198,18 +196,22 @@ async function init() {
 
   loadSceneIntoWorld(json, world);
 
-
   for (let b of json.body) {
     let g = drawBody(b, renderer);
     renderer.stage.addChild(g);
   }
-
 
   spawner = createBox(0, 25, 1, 1, true);
   flipper_right = createBox(44.5, 6, 1, 1, true);
   flipper_right_2 = createBox(24.5, 10, 1, 1, true);
   wheel_1 = createBox(12, 14, 5, 0.2, true);
   wheel_2 = createBox(12, 14, 5, 0.2, true);
+
+  balls = [];
+  balls.push(createBox(0, 0, 1, 1, false));
+  balls.push(createBox(0, 0, 1, 1, false));
+  balls.push(createBox(0, 0, 1, 1, false));
+  balls.push(createBox(0, 0, 1, 1, false));
 
   playerTwo = [];
   playerTwo.push(createBox(-27, 0, 5, 0.5, true));
